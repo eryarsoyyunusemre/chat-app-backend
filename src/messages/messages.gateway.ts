@@ -7,7 +7,7 @@ import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
-@WebSocketGateway()
+@WebSocketGateway(80)
 export class MessagesGateway {
   constructor(private readonly messagesService: MessagesService) {}
 

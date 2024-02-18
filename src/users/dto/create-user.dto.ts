@@ -1,9 +1,8 @@
 import { IsOptional, IsString } from 'class-validator';
 import { UsersEntity } from '../user.entity';
-
 import { randomBytes } from 'crypto';
-import { ApiProperty } from '@nestjs/swagger';
 import { UserLevel } from '../enums/enums';
+
 export class CreateUserDto {
   @IsString()
   name: string;

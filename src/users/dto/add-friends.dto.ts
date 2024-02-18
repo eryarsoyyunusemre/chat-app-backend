@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class CreateNotificationDto {
+export class addFriendsDto {
   @IsString()
-  name: string;
+  friendsCode: string;
 }

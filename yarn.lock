@@ -778,6 +778,14 @@
     socket.io "4.7.4"
     tslib "2.6.2"
 
+"@nestjs/platform-ws@^10.3.3":
+  version "10.3.3"
+  resolved "https://registry.npmjs.org/@nestjs/platform-ws/-/platform-ws-10.3.3.tgz#3fdbe1207c67834bbe4fbfb63c26f9125b7e4c82"
+  integrity sha512-UMVW0Tai9wPJJakQdNOuSeuHHSbezIzHMiMUa75Nj9oYY1aiNkeN3QZKX2/fHPd6Zu1+RN10V6xayw2HOtn8zA==
+  dependencies:
+    tslib "2.6.2"
+    ws "8.16.0"
+
 "@nestjs/schematics@^9.0.0", "@nestjs/schematics@^9.0.4":
   version "9.2.0"
   resolved "https://registry.npmjs.org/@nestjs/schematics/-/schematics-9.2.0.tgz#f840054b5ae4b0b4e70aa9f72c09c3cf388f2512"
@@ -5689,6 +5697,11 @@ write-file-atomic@^4.0.2:
   dependencies:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
+
+ws@8.16.0:
+  version "8.16.0"
+  resolved "https://registry.npmjs.org/ws/-/ws-8.16.0.tgz#d1cd774f36fbc07165066a60e40323eab6446fd4"
+  integrity sha512-HS0c//TP7Ina87TfiPUz1rQzMhHrl/SG2guqRcTOIUYD2q8uhUdNHZYJUaQ8aTGPzCh+c6oawMKW35nFl1dxyQ==
 
 ws@~8.11.0:
   version "8.11.0"

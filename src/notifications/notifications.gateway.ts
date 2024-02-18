@@ -6,14 +6,19 @@ import {
 import { NotificationsService } from './notifications.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { BadRequestException, UseGuards } from '@nestjs/common';
+import { RolesGuard } from '../core/guards';
 
-@WebSocketGateway()
+@WebSocketGateway({ namespace: 'notifications' })
 export class NotificationsGateway {
   constructor(private readonly notificationsService: NotificationsService) {}
 
   @SubscribeMessage('createNotification')
-  create(@MessageBody() createNotificationDto: CreateNotificationDto) {
-    return this.notificationsService.create(createNotificationDto);
+  async create(@MessageBody() createNotificationDto: CreateNotificationDto) {
+    console.log(createNotificationDto);
+
+    return 'hello';
   }
 
   @SubscribeMessage('findAllNotifications')
