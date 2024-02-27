@@ -48,20 +48,29 @@ export class UsersController {
 
   @UseGuards(AuthGuard())
   @Post('/friends')
-  async addFriends(
-    @Body() addFriends: addFriendsDto,
-    @GetUser() user: JwtPayload,
-  ) {
-    return await this.usersService.addFriends(addFriends, user);
-  }
-
-  @UseGuards(AuthGuard())
-  @Post('/friends')
   async addFriendsRequest(
     @Body() addFriends: addFriendsDto,
     @GetUser() user: JwtPayload,
   ) {
-    return await this.usersService.friendsRequest(addFriends, user);
+    return await this.usersService.friendsRequest(addFriends, user).then(() => {
+      return 'Arkadaşlık İsteği Gönderildi!';
+    });
+  }
+
+  @UseGuards(AuthGuard())
+  @Post('/accept')
+  async accept(@Body() addFriends: addFriendsDto, @GetUser() user: JwtPayload) {
+    return await this.usersService.addFriends(addFriends, user).then(() => {
+      return 'Arkadaş Eklendi!';
+    });
+  }
+
+  @UseGuards(AuthGuard())
+  @Post('/reject')
+  async reject(@Body() addFriends: addFriendsDto, @GetUser() user: JwtPayload) {
+    return await this.usersService.rejectFriends(addFriends, user).then(() => {
+      return 'Arkadaşlık Reddildi!';
+    });
   }
 
   @UseGuards(AuthGuard(), RolesGuard)

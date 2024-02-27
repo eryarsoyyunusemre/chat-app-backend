@@ -1,3 +1,8 @@
+import { IsEnum, IsOptional } from 'class-validator';
+import { NotificationsEnum } from '../enums/enums';
+
 export class UpdateNotificationDto {
-  id: number;
+  @IsOptional()
+  @IsEnum(NotificationsEnum)
+  status: NotificationsEnum;
 }

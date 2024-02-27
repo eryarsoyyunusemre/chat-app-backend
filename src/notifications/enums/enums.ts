@@ -4,3 +4,8 @@ export enum NotificationsEnum {
   ONAYLANDI = 3,
   REDDEDILDI = 4,
 }
+
+export enum NotificationsInfo {
+  ARKADASLIKISTEGI = 1,
+  MESAJBILDIRIMI = 2,
+}

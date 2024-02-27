@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { MessagesModule } from './messages/messages.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { typeOrmDatabase } from './config/database';
+import { UsersService } from './users/users.service';
+import { NotificationsService } from './notifications/notifications.service';
 
 @Module({
   imports: [

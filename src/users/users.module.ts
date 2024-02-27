@@ -7,9 +7,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from './user.entity';
 import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationEntity } from '../notifications/notification.entity';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UsersEntity]),
+    TypeOrmModule.forFeature([UsersEntity, NotificationEntity]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'asdfsdaf',

@@ -15,6 +15,11 @@ import { userLoginDto } from './dto/user-login.dto';
 import { addFriendsDto } from './dto/add-friends.dto';
 import { JwtPayload } from '../core/jwtPayload';
 import { NotificationsService } from '../notifications/notifications.service';
+import {
+  NotificationsEnum,
+  NotificationsInfo,
+} from '../notifications/enums/enums';
+import { NotificationEntity } from '../notifications/notification.entity';
 @Injectable()
 export class UsersService {
   constructor(
@@ -127,6 +132,30 @@ export class UsersService {
 
   async friendsRequest(addFriends: addFriendsDto, user: JwtPayload) {
     try {
+      const getUser = await this.getUsersByFriendsCode(addFriends.friendsCode);
+
+      const getRequest = await this.notificationsService.sentNotifications(
+        user.uuid,
+        getUser.uuid,
+      );
+
+      if (getRequest.length >= 1) {
+        throw new InternalServerErrorException(
+          'Bu kullanıyıca zaten bir istek gönderilmiştir!',
+        );
+      }
+
+      const notification = new NotificationEntity();
+      notification.sender = new UsersEntity();
+      notification.sender.uuid = user.uuid;
+      notification.buyer = new UsersEntity();
+      notification.buyer.uuid = getUser.uuid;
+      notification.content = 'Arkadaşlık İsteği';
+      notification.info = NotificationsInfo.ARKADASLIKISTEGI;
+      notification.status = NotificationsEnum.GONDERILDI;
+      notification.friendsCode = addFriends.friendsCode;
+
+      await this.notificationsService.create(notification);
     } catch (error) {
       throw new ForbiddenException(error.message || error);
     }
@@ -135,23 +164,40 @@ export class UsersService {
   // Kullanıcıya arkadaş ekleme
   async addFriends(addFriends: addFriendsDto, user: JwtPayload) {
     try {
-      const getFriends = await this.getUsersByFriendsCode(
-        addFriends.friendsCode,
+      const getNotifications =
+        await this.notificationsService.getNotificationsById(
+          addFriends.notifications_id,
+        );
+
+      await this.usersRepository
+        .createQueryBuilder('users')
+        .relation(UsersEntity, 'friends')
+        .of(getNotifications.sender.uuid)
+        .add(getNotifications.buyer.uuid);
+
+      await this.usersRepository
+        .createQueryBuilder('users')
+        .relation(UsersEntity, 'friends')
+        .of(getNotifications.buyer.uuid)
+        .add(getNotifications.sender.uuid);
+
+      await this.notificationsService.remove(addFriends.notifications_id);
+
+      return getNotifications;
+    } catch (error) {
+      throw new ForbiddenException(error.message || error);
+    }
+  }
+
+  async rejectFriends(addFriends: addFriendsDto, user: JwtPayload) {
+    try {
+      await this.notificationsService.getNotificationsById(
+        addFriends.notifications_id,
       );
 
-      await this.usersRepository
-        .createQueryBuilder('users')
-        .relation(UsersEntity, 'friends')
-        .of(user.uuid)
-        .add(getFriends.uuid);
+      await this.notificationsService.remove(addFriends.notifications_id);
 
-      await this.usersRepository
-        .createQueryBuilder('users')
-        .relation(UsersEntity, 'friends')
-        .of(getFriends.uuid)
-        .add(user.uuid);
-
-      return getFriends;
+      return 'OK';
     } catch (error) {
       throw new ForbiddenException(error.message || error);
     }
