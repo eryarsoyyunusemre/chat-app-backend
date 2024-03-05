@@ -1,10 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreateNotificationDto } from './dto/create-notification.dto';
-import { NotificationsEnum, NotificationsInfo } from './enums/enums';
+import { NotificationsEnum } from './enums/enums';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationEntity } from './notification.entity';
 import { Repository } from 'typeorm';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { JwtPayload } from '../core/jwtPayload';
 
 @Injectable()
 export class NotificationsService {
@@ -12,8 +12,26 @@ export class NotificationsService {
     @InjectRepository(NotificationEntity)
     private readonly notificationsRepository: Repository<NotificationEntity>,
   ) {}
+
   async findAll() {
-    return `This action returns all notifications`;
+    try {
+      return await this.notificationsRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(error.message || error);
+    }
+  }
+
+  async getMyNotifications(user: JwtPayload) {
+    try {
+      return await this.notificationsRepository
+        .createQueryBuilder('notifi')
+        .select(['notifi', 'buyer.uuid', 'sender.uuid'])
+        .innerJoin('notifi.buyer', 'buyer')
+        .where('notifi.buyer = :id', { id: user.uuid })
+        .getMany();
+    } catch (error) {
+      throw new InternalServerErrorException(error.message || error);
+    }
   }
 
   async getNotificationsById(id: number) {

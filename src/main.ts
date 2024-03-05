@@ -21,6 +21,8 @@ async function bootstrap() {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(requestIp.mw());
 
+  // app.useWebSocketAdapter(new WsAdapter(app));
+
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .setTitle('Message App Backend')

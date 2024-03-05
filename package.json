@@ -35,6 +35,8 @@
     "class-validator": "^0.14.1",
     "config": "^3.3.11",
     "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.2",
     "passport": "^0.7.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
